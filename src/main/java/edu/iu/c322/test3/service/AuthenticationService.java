@@ -1,14 +1,16 @@
 package edu.iu.c322.test3.service;
 
+import edu.iu.c322.test3.model.Customer;
 import edu.iu.c322.test3.repository.CustomerRepository;
-import edu.iu.habahram.primesservice.model.Customer;
-import edu.iu.habahram.primesservice.repository.AuthenticationDBRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.IOException;
 
@@ -18,10 +20,11 @@ public class AuthenticationService implements
     CustomerRepository customerRepository;
 
 
-    public AuthenticationService(
-            CustomerRepository customerRepository) {
+    @Autowired
+    public AuthenticationService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
+
 
     @Override
     public Customer register(Customer customer) throws IOException {
@@ -51,7 +54,7 @@ public class AuthenticationService implements
             throws UsernameNotFoundException {
         try {
             Customer customer =
-                    authenticationRepository.findByUsername(username);
+                    customerRepository.findByUsername(username);
             if(customer == null) {
                 throw new UsernameNotFoundException("");
             }

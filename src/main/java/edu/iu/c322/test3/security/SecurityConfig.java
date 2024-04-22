@@ -1,8 +1,9 @@
 package edu.iu.c322.test3.security;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 @EnableWebSecurity
@@ -51,7 +53,7 @@ public class SecurityConfig {
                 .csrf(x -> x.disable())
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers(
-                                HttpMethod.POST,"/register", "/signin").permitAll()
+                                HttpMethod.POST,"/signup", "/signin").permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,"/").permitAll()
                         .anyRequest().authenticated()
@@ -64,7 +66,7 @@ public class SecurityConfig {
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
-        JWKSet jwkSet = new JWKSet(rsaKey);
+        JWKSet jwkSet = new JWKSet((JWK) rsaKey);
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
     @Bean
